@@ -14,7 +14,7 @@ btn-primary btn-sm">&larr; Back</a>
  </div>
  <div class="card-body">
  <form action="{{ route('products.store') }}"
-method="post">
+method="post" enctype="multipart/form-data">
  @csrf
  <div class="mb-3 row">
  <label for="code" class="col-md-4 col-formlabel text-md-end text-start">Code</label>
@@ -76,7 +76,19 @@ name="description">{{ old('description') }}</textarea>
  @enderror
  </div>
  </div>
-<div class="mb-3 row">
+ <div class="mb-3 row">
+ <label for="image" class="col-md-4 col-form-label text-md-end text-start">Product Image</label>
+ <div class="col-md-6">
+ <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" accept="image/*">
+ @error('image')
+ <span class="text-danger">{{ $message }}</span>
+ @enderror
+ <div id="imagePreview" class="mt-2" style="display: none;">
+ <img src="" alt="Preview" class="img-thumbnail" style="max-height: 200px;">
+ </div>
+ </div>
+ </div>
+ <div class="mb-3 row">
  <input type="submit" class="col-md-3 offsetmd-5 btn btn-primary" value="Add Product">
  </div>
  </form>
@@ -84,5 +96,37 @@ name="description">{{ old('description') }}</textarea>
  </div>
  </div> 
 </div>
+
+@push('styles')
+<style>
+ .form-control[type="file"] {
+ padding: 0.375rem;
+ }
+ #imagePreview img {
+ max-width: 100%;
+ height: auto;
+ }
+</style>
+@endpush
+
+@push('scripts')
+<script>
+ document.getElementById('image').addEventListener('change', function(e) {
+ const preview = document.getElementById('imagePreview');
+ const file = e.target.files[0];
+ 
+ if (file) {
+ const reader = new FileReader();
+ reader.onload = function(e) {
+ preview.querySelector('img').src = e.target.result;
+ preview.style.display = 'block';
+ }
+ reader.readAsDataURL(file);
+ } else {
+ preview.style.display = 'none';
+ }
+ });
+</script>
+@endpush
  
 @endsection

@@ -17,9 +17,9 @@ Product</a>
  <thead>
  <tr>
  <th scope="col">S#</th>
- <th scope="col">Code</th>
+ <th scope="col">Image</th>
  <th scope="col">Name</th>
- <th scope="col">Quantity</th>
+ <th scope="col">Description</th>
  <th scope="col">Price</th>
  <th scope="col">Action</th>
  </tr>
@@ -29,10 +29,16 @@ Product</a>
 <tr>
  <th scope="row">{{ $loop->iteration 
 }}</th>
- <td>{{ $product->code }}</td>
+ <td>
+ @if($product->image)
+ <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" style="max-width: 100px; max-height: 100px;">
+ @else
+ <span class="text-muted">No image</span>
+ @endif
+ </td>
  <td>{{ $product->name }}</td>
- <td>{{ $product->quantity }}</td>
- <td>{{ $product->price }}</td>
+ <td>{{ $product->description }}</td>
+ <td>${{ number_format($product->price, 2) }}</td>
  <td>
  <form action="{{ 
 route('products.destroy', $product->id) }}" method="post">
